@@ -32,7 +32,7 @@ class LOGPreprocessor:
                 timestamp=datetime.strptime(splitted_line[0]+ ' ' + splitted_line[1], format),
                 amount= float(splitted_line[16].replace(')', '')),
                 log_level=models.LogLevel[splitted_line[2].upper()],
-                transaction_type=models.Operation[splitted_line[10].upper().replace(',', '')],
+                transaction_type=splitted_line[10].upper().replace(',', ''),
                 account_type= models.Account.SAVINGS if splitted_line[12] == 'ahorros' else models.Account.CHECKING,
                 state=splitted_line[14].replace(',', ''),
                 direction=None,
