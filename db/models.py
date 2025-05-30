@@ -7,30 +7,30 @@ from typing import (
 )
 
 class Operation(str, Enum):
-    TRANSFERIR = "transferir"
-    CONSIGNAR = "consignar"
-    RETIRAR= "retirar"
+    TRANSFERIR = "TRANSFERIR"
+    CONSIGNAR = "CONSIGNAR"
+    RETIRAR= "RETIRAR"
     
 class Account(str, Enum):
-    AHORROS = "ahorros"
-    CORRIENTE = "corriente"    
-    
+    SAVINGS = "AHORROS"
+    CHECKING = "CORRIENTE"    
+
 class ApplicationType(str, Enum):
     SECUCHECK = "SecuCheck"
     MIDFLOWESB = "Midflow_ESB"
     COREBANK = "CoreBank"
     
 class ValidateResult(str, Enum):
-    APROBADA = "Aprobada"
-    RECHAZADA = "Rechazada"
+    APROVED = "APROBADA"
+    REJECTED = "RECHAZADA"
 
 class LogLevel(str, Enum):
     INFO = "INFO"
     ERROR= "ERROR"
 
 class Direction(str, Enum):
-    REQUEST = "request"
-    RESPONSE = "response"
+    REQUEST = "REQUEST"
+    RESPONSE = "RESPONSE"
     
 class StatusCode(int, Enum):
     OK = 200
@@ -50,15 +50,14 @@ class ApplicationTransaction(SQLModel, table=True):
         primary_key=True
     )
     
-    state: str = Field(
-        sa_column_kwargs={"nullable": True},
-        default="Completada"
+    state: Optional[str] = Field(
+        sa_column_kwargs={"nullable": True}
     )
     timestamp: datetime = Field(
         sa_column_kwargs={"nullable": False}
     )
     validate_result: Optional[ValidateResult] = Field(
-        sa_column_kwargs={"nullable": False}
+        sa_column_kwargs={"nullable": True}
     )
     failed_reason: Optional[str] = Field(
         default=None
