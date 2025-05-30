@@ -7,9 +7,9 @@ from typing import (
 )
 
 class Operation(str, Enum):
-    TRANSFERIR = "TRANSFERIR"
-    CONSIGNAR = "CONSIGNAR"
-    RETIRAR= "RETIRAR"
+    TRANSFER = "TRANSFERIR"
+    CONSIGN = "CONSIGNAR"
+    WITHDRAW= "RETIRAR"
     
 class Account(str, Enum):
     SAVINGS = "AHORROS"

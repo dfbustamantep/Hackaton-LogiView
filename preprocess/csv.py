@@ -24,16 +24,15 @@ class CSVPreprocessor:
                 module=str(row.get('modulo'))
             )
             self.transactions.append(transaction)
-            
             app_transaction = models.ApplicationTransaction(
                 transaction_id=str(row.get('transaction_id')),
                 application_name=models.ApplicationType.MIDFLOWESB,
-                timestamp= datetime.strptime(str(row.get('timestamp'), "%Y-%m-%d %H:%M:%S")),
-                log_level=None,
-                direction=None,
-                operation=None,
-                status_code=None,
-                latency=None,
+                timestamp= datetime.strptime(str(row.get('timestamp')),  "%Y-%m-%d %H:%M:%S"),
+                log_level=models.LogLevel.INFO if str(row.get('nivel_log')) == 'INFO' else models.LogLevel.ERROR,
+                direction=models.Direction.REQUEST if str(row.get('direction')) == 'request' else models.Direction.RESPONSE,
+                operation=models.Operation.CONSIGN if str(row.get('operation')) == 'consignar' else models.Operation.WITHDRAW if str(row.get('operation')) == 'retirar' else models.Operation.TRANSFER,
+                status_code=models.StatusCode.OK if str(row.get('transaction_id')) == '200' else models.StatusCode.INTERNAL_SERVER_ERROR,
+                latency=int(str(row.get('transaction_id'))) if str(row.get('transaction_id')).isdigit() else None,
                 validate_result=None,
                 failed_reason=None,
                 realized_verifications=None,
