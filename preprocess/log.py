@@ -5,7 +5,6 @@ from datetime import datetime
 class LOGPreprocessor:
     log_path: str
     transactions: List[models.Transaction] = []
-    applications: List[models.Application] = []
     app_transactions: List[models.ApplicationTransaction] = []
     def __init__(self, log_path):
         self.log_path = log_path
@@ -15,7 +14,6 @@ class LOGPreprocessor:
             lines = file.readlines()
         for i, line in enumerate(lines):
             splitted_line = line.split()
-            application = models.Application(name=models.ApplicationType.COREBANK)
             user_id, ip_address = splitted_line[4].split('@')
             transaction_id = splitted_line[8].replace(',', '')
             transaction = models.Transaction(
@@ -24,12 +22,10 @@ class LOGPreprocessor:
                 module=splitted_line[3].replace('[', '').replace(']', ''),
                 ip_address=ip_address
             )
-            application.transactions.append(transaction)
             self.transactions.append(transaction)
-            transaction.applications.append(application)
-            self.applications.append(application)
             
             format = "%Y-%m-%d %H:%M:%S"
+            
             app_transaction = models.ApplicationTransaction(
                 transaction_id=transaction_id,
                 application_name=models.ApplicationType.COREBANK,
@@ -37,7 +33,7 @@ class LOGPreprocessor:
                 amount= float(splitted_line[16].replace(')', '')),
                 log_level=models.LogLevel[splitted_line[2].upper()],
                 transaction_type=models.Operation[splitted_line[10].upper().replace(',', '')],
-                account_type=models.Account[splitted_line[12].upper().replace(',', '')],
+                account_type= models.Account.SAVINGS if splitted_line[12] == 'ahorros' else models.Account.CHECKING,
                 state=splitted_line[14].replace(',', ''),
                 direction=None,
                 operation=None,

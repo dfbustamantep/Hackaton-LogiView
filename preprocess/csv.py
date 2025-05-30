@@ -1,31 +1,46 @@
 import pandas as pd
+import db.models as models
+from typing import List
+from datetime import datetime
 
 class CSVPreprocessor:
     file_path: str
     df: pd.DataFrame
+    transactions: List[models.Transaction] = []
+    app_transactions: List[models.ApplicationTransaction] = []
     
-
-    def __init__ (self, file_path):
+    def __init__(self, file_path):
         self.file_path = file_path
     
     def load_data(self):
-        self.df = pd.read_csv(self.file_path) 
-        print(f"Data loaded from {self.file_path} with shape {self.df.shape}")
-
-    def view_data(self):
-        if self.df is not None:
-            print(self.df.head())
-        else:
-            raise ValueError("DataFrame is not loaded. Please load the data first.")
-    
-    def get_info(self):
-        if self.df is not None:
-            return self.df.info()
-        else:
-            raise ValueError("DataFrame is not loaded. Please load the data first.")
+        self.df = pd.read_csv(self.file_path)
         
-    def get_description(self):
-        if self.df is not None:
-            print(self.df.describe())
-        else:
-            raise ValueError("DataFrame is not loaded. Please load the data first.")
+    def preprocess(self):
+        for index, row in self.df.iterrows():
+            transaction = models.Transaction(
+                transaction_id=str(row.get('transaction_id')),
+                user_id=str(row.get('user_id')),
+                ip_address=str(row.get('ip_address')),
+                module=str(row.get('modulo'))
+            )
+            self.transactions.append(transaction)
+            
+            app_transaction = models.ApplicationTransaction(
+                transaction_id=str(row.get('transaction_id')),
+                application_name=models.ApplicationType.MIDFLOWESB,
+                timestamp= datetime.strptime(str(row.get('timestamp'), "%Y-%m-%d %H:%M:%S")),
+                log_level=None,
+                direction=None,
+                operation=None,
+                status_code=None,
+                latency=None,
+                validate_result=None,
+                failed_reason=None,
+                realized_verifications=None,
+                transaction_type=None,
+                account_type=None,
+                state=None,
+                amount=None
+            )
+            
+            self.app_transactions.append(app_transaction)
