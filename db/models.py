@@ -86,7 +86,7 @@ class ApplicationTransaction(SQLModel, table=True):
     realized_verifications: Optional[str] = Field(
         sa_column_kwargs={"nullable": True}
     )
-    latency: Optional[int] = Field(
+    latency: Optional[str] = Field(
         sa_column_kwargs={"nullable": True}
     )
     
