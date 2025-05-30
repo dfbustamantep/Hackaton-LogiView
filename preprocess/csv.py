@@ -32,7 +32,7 @@ class CSVPreprocessor:
                 direction=models.Direction.REQUEST if str(row.get('direction')) == 'request' else models.Direction.RESPONSE,
                 operation=models.Operation.CONSIGN if str(row.get('operation')) == 'consignar' else models.Operation.WITHDRAW if str(row.get('operation')) == 'retirar' else models.Operation.TRANSFER,
                 status_code=models.StatusCode.OK if str(row.get('transaction_id')) == '200' else models.StatusCode.INTERNAL_SERVER_ERROR,
-                latency=str(row.get('latency_ms')) if not pd.isna(row.get('latency_ms')) else "NaN",
+                latency=str(row.get('latency_ms')) if not pd.isnull(row.get('latency_ms')) else "NaN",
                 validate_result=None,
                 failed_reason=None,
                 realized_verifications=None,

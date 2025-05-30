@@ -18,9 +18,9 @@ def main():
     csv.preprocess()
     log.preprocess()
     
-    add_data(json.transactions)
-    add_data(csv.transactions)
-    add_data(log.transactions)
+    # add_data(json.transactions)
+    # add_data(csv.transactions)
+    # add_data(log.transactions)
     
     add_data(json.app_transactions)
     add_data(csv.app_transactions)
