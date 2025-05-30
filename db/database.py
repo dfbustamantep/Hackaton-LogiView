@@ -13,7 +13,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 if DATABASE_URL is None:
     raise ValueError("DATABASE_URL environment variable is not set.")
 
-# Crea el engine (asegúrate que nunca quede None)
+# Crea el engine (Nunca poner None)
 engine = create_engine(DATABASE_URL, echo=True)
 
 
@@ -30,7 +30,7 @@ def add_data(data):
                 session.commit()
             except IntegrityError as e:
                 session.rollback()
-                print(f"[WARNING] Error al insertar {item}: {e.orig}")
+                print(f"Error al insertar {item}: {e.orig}")
 
 def get_session():
     with Session(engine) as session:
@@ -51,7 +51,8 @@ def update_latencies(latencies):
         with Session(engine) as session:
             for tx_id, latency_str in latencies:
                 session.query(models.ApplicationTransaction) \
-                    .filter_by(transaction_id=tx_id) \
+                    .filter_by(transaction_id=tx_id ) \
+                    .filter_by(application_name="MIDFLOWESB") \
                     .update({"latency": latency_str})
             session.commit()
 

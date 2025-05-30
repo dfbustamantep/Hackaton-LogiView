@@ -18,14 +18,14 @@ def main():
     csv.preprocess()
     log.preprocess()
     
-    # add_data(json.transactions)
-    # add_data(csv.transactions)
-    # add_data(log.transactions)
-    update_latencies(csv.latencies)
+    add_data(json.transactions)
+    add_data(csv.transactions)
+    add_data(log.transactions)
     
-    # add_data(json.app_transactions)
-    # add_data(csv.app_transactions)
-    # add_data(log.app_transactions)
+    add_data(json.app_transactions)
+    add_data(csv.app_transactions)
+    add_data(log.app_transactions)
+    update_latencies(csv.latencies)
     
 if __name__ == "__main__":
     main()
