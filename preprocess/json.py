@@ -17,7 +17,7 @@ class JSONPreprocessor:
             self.data = json.load(file)
         
     def preprocess(self):
-        """Process the loaded JSON data into transactions."""
+        """Procesa los datos del JSON"""
         if not self.data:
             raise ValueError("Data not loaded. Call load_data() first.")
         
