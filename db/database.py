@@ -2,6 +2,8 @@ from sqlmodel import create_engine, Session, SQLModel
 from sqlalchemy import inspect, text
 from dotenv import load_dotenv
 import os
+from sqlalchemy.exc import IntegrityError
+
 
 # Carga las variables del archivo .env
 load_dotenv()
@@ -16,13 +18,23 @@ engine = create_engine(DATABASE_URL, echo=True)
 
 
 def init_db():
-    import models  # importa aquí para que SQLModel registre las tablas
+    import models
     SQLModel.metadata.create_all(engine)
 
+def add_data(data):
+    with Session(engine) as session:
+        for item in data:
+            try:
+                session.add(item)
+                session.commit()
+            except IntegrityError as e:
+                session.rollback()
+                print(f"[WARNING] Error al insertar {item}: {e.orig}")
 
 def get_session():
     with Session(engine) as session:
         yield session
+        
 
 
 def list_tables_inspector() -> list[str]:
