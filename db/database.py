@@ -3,7 +3,7 @@ from sqlalchemy import inspect, text
 from dotenv import load_dotenv
 import os
 from sqlalchemy.exc import IntegrityError
-
+from db import models
 
 # Carga las variables del archivo .env
 load_dotenv()
@@ -42,6 +42,18 @@ def list_tables_inspector() -> list[str]:
     """Devuelve los nombres de las tablas usando SQLAlchemy Inspector."""
     inspector = inspect(engine)
     return inspector.get_table_names()
+
+def update_latencies(latencies):
+        """
+        Ejecuta un UPDATE por cada transaction_id para asignar la latencia
+        previamente extraída.
+        """
+        with Session(engine) as session:
+            for tx_id, latency_str in latencies:
+                session.query(models.ApplicationTransaction) \
+                    .filter_by(transaction_id=tx_id) \
+                    .update({"latency": latency_str})
+            session.commit()
 
 if __name__ == "__main__":
     init_db()

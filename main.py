@@ -4,7 +4,7 @@ from preprocess import (
     log as logProcessor
 )
 
-from db.database import add_data
+from db.database import add_data, update_latencies
 
 def main():
     json = jsonProcessor.JSONPreprocessor(file_path="source/logs_SecuCheck.json")
@@ -21,10 +21,11 @@ def main():
     # add_data(json.transactions)
     # add_data(csv.transactions)
     # add_data(log.transactions)
+    update_latencies(csv.latencies)
     
-    add_data(json.app_transactions)
-    add_data(csv.app_transactions)
-    add_data(log.app_transactions)
+    # add_data(json.app_transactions)
+    # add_data(csv.app_transactions)
+    # add_data(log.app_transactions)
     
 if __name__ == "__main__":
     main()

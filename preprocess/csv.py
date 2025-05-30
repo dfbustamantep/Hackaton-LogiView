@@ -8,6 +8,7 @@ class CSVPreprocessor:
     df: pd.DataFrame
     transactions: List[models.Transaction] = []
     app_transactions: List[models.ApplicationTransaction] = []
+    latencies: List[tuple] = []
     
     def __init__(self, file_path):
         self.file_path = file_path
@@ -24,6 +25,11 @@ class CSVPreprocessor:
                 module=str(row.get('modulo'))
             )
             self.transactions.append(transaction)
+            
+            raw_latency = row.get('latency_ms')
+            latency_str = str(raw_latency) if pd.notnull(raw_latency) else ""
+            self.latencies.append((transaction.transaction_id, latency_str))
+            
             app_transaction = models.ApplicationTransaction(
                 transaction_id=str(row.get('transaction_id')),
                 application_name=models.ApplicationType.MIDFLOWESB,
